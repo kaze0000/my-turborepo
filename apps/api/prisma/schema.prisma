@@ -1,0 +1,18 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 以下を定義してから、yarn prisma migrate dev --name create_user
+// そうするとmigrationsディレクトリが作られる
+model User {
+  id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email String @unique
+}
