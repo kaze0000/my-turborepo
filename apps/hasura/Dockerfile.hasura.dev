@@ -1,0 +1,12 @@
+# FROM hasura/graphql-engine:v2.13.2cli-migrations-v3
+FROM hasura/graphql-engine:v2.17.0
+
+COPY ./apps/hasura /hasura
+
+ENV HASURA_GRAPHQL_UNAUTHORIZED_ROLE="anonymous"
+ENV HASURA_GRAPHQL_ENABLE_CONSOLE="true"
+ENV HASURA_GRAPHQL_EXPERIMENTAL_FEATURES="naming_convention"
+ENV HASURA_GRAPHQL_MIGRATIONS_DIR="/hasura/migrations"
+ENV HASURA_GRAPHQL_METADATA_DIR="/hasura/metadata"
+
+EXPOSE 8080

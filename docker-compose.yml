@@ -12,6 +12,28 @@ services:
       - POSTGRES_PASSWORD=password
     networks:
       - default_network
+  hasura:
+    build:
+      context: .
+      dockerfile: ./apps/hasura/Dockerfile.hasura.dev
+    volumes:
+      - ./apps/hasura:/tmp/hasura-project/hasura
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "db"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:password@db:5432/nest_db
+      REMOTE_SCHEMA_ENDPOINT: http://host.docker.internal:4000/graphql
+      HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_JWT_SECRET: '{"type": "HS512", "key": "3EK6FD+o0+c7tzBNVfjpMkNDi2yARAAKzQlk8O2IKoxQu4nF7EdAh8s3TwpHwrdWT6R"}'
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_MIGRATIONS_DIR: "/tmp/hasura-project/migrations"
+      HASURA_GRAPHQL_METADATA_DIR: "/tmp/hasura-project/metadata"
+    networks:
+      - default_network
 volumes:
   db-store:
 networks:
